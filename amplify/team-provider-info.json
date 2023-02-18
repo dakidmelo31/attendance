@@ -1,0 +1,41 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-attendance-dev-53620-authRole",
+      "UnauthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-dev-53620-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-dev-53620-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-attendance-dev-53620-deployment",
+      "UnauthRoleName": "amplify-attendance-dev-53620-unauthRole",
+      "StackName": "amplify-attendance-dev-53620",
+      "StackId": "arn:aws:cloudformation:us-east-2:303937798081:stack/amplify-attendance-dev-53620/cf102760-af45-11ed-8aa4-0270d9a75bbe",
+      "AmplifyAppId": "d1si3e1yzbg553"
+    }
+  },
+  "dakid": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-attendance-dakid-53854-authRole",
+      "UnauthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-dakid-53854-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-dakid-53854-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-attendance-dakid-53854-deployment",
+      "UnauthRoleName": "amplify-attendance-dakid-53854-unauthRole",
+      "StackName": "amplify-attendance-dakid-53854",
+      "StackId": "arn:aws:cloudformation:us-east-2:303937798081:stack/amplify-attendance-dakid-53854/2b174430-af46-11ed-82a5-068c782c70b3",
+      "AmplifyAppId": "d1si3e1yzbg553"
+    }
+  },
+  "attendu": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-attendance-attendu-55734-authRole",
+      "UnauthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-attendu-55734-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::303937798081:role/amplify-attendance-attendu-55734-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-attendance-attendu-55734-deployment",
+      "UnauthRoleName": "amplify-attendance-attendu-55734-unauthRole",
+      "StackName": "amplify-attendance-attendu-55734",
+      "StackId": "arn:aws:cloudformation:us-east-2:303937798081:stack/amplify-attendance-attendu-55734/c6e0a2b0-af48-11ed-b59a-0a91f248a73e",
+      "AmplifyAppId": "d1si3e1yzbg553"
+    }
+  }
+}

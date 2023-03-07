@@ -36,6 +36,11 @@
       "StackName": "amplify-attendance-attendu-55734",
       "StackId": "arn:aws:cloudformation:us-east-2:303937798081:stack/amplify-attendance-attendu-55734/c6e0a2b0-af48-11ed-b59a-0a91f248a73e",
       "AmplifyAppId": "d1si3e1yzbg553"
+    },
+    "categories": {
+      "auth": {
+        "attendance54585289": {}
+      }
     }
   }
 }

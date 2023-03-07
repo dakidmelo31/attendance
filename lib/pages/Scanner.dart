@@ -1,11 +1,13 @@
-import 'package:attendance/main.dart';
-import 'package:attendance/models/Student.dart';
+import 'dart:io';
+
 import 'package:attendance/utility/Globals.dart';
-import 'package:attendance/utility/MLService.dart';
+import 'package:dio/dio.dart';
+import 'package:aws_rekognition_api/rekognition-2016-06-27.dart' as aws;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:lottie/lottie.dart';
 
 class Scanner extends StatefulWidget {
@@ -17,52 +19,68 @@ class Scanner extends StatefulWidget {
 }
 
 class _ScannerState extends State<Scanner> {
-  late CameraController cameraController;
-  late final Vision _googleMlKit;
   bool capturing = false;
+  final rekognition = aws.Rekognition(region: 'us-east-2',credentials:aws.AwsClientCredentials(accessKey: 'AKIAUNRA2X7AYEAUE2WS', secretKey: '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') );
 
   final TextEditingController _textController = TextEditingController();
 
+  final picker = ImagePicker();
+bool readyToUpload = false;
+  XFile? _image;
+final dio = Dio();
+  Future<void> loginFace()async{
+
+  }
+  Future<void> registerFace() async{
+    debugPrint("registering user");
+    // arn:aws:rekognition:us-east-2:303937798081:project/attendance_mariama/1678153269547
+    // var response = await rekognition.createProject(projectName: "attendance_mariama");
+
+    final Image image = Image.file( File(_image!.path));
+
+    debugPrint("Now adding face");
+    // var res = await rekognition.indexFaces(collectionId: "attendance_mariama", );
+    // debugPrint("${response.projectArn}");
+
+
+  }
+
+  Future<void> getFace() async{
+    HapticFeedback.heavyImpact();
+    final img = await picker.pickImage(source: ImageSource.camera, imageQuality: 90, maxHeight: 500, maxWidth: 500, preferredCameraDevice: CameraDevice.front, requestFullMetadata: false);
+
+    if(img != null){
+      debugPrint("Image grabbed");
+
+      setState(() {
+        _image = img;
+      });
+
+      Future.delayed(const Duration(seconds: 2), (){
+        setState(() {
+          readyToUpload = true;
+        });
+      });
+    }
+    else{
+      debugPrint("No Image found");
+    }
+
+
+  }
+
   // final _mlService= MLService();
-  Future<void> googleInit() async {
-    _googleMlKit = GoogleMlKit.vision;
+  Future<void> runFace(CameraImage inputImage) async {
     // await faceDetector.processImage(inputImage)
   }
 
-  final List<Face> _faces = [];
-  final faceDetector = FaceDetector(
-      options: FaceDetectorOptions(
-    enableTracking: true,
-  ));
-
   @override
   void initState() {
-    googleInit();
-
-    cameraController = CameraController(cameras[1], ResolutionPreset.max);
-    cameraController.initialize().then((value) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        debugPrint("Camera mounted");
-      });
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        switch (e.code) {
-          case "CameraAccessDenied":
-            break;
-          default:
-            break;
-        }
-      }
-    });
     super.initState();
   }
 
   @override
   void dispose() {
-    cameraController.dispose();
     super.dispose();
   }
 
@@ -71,9 +89,7 @@ class _ScannerState extends State<Scanner> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Globals.backgroundColor,
-      body: !cameraController.value.isInitialized
-          ? const Center(child: Text("Give permission to camera"))
-          : Column(
+      body:Column(
               children: [
                 const Spacer(),
                 Card(
@@ -108,23 +124,22 @@ class _ScannerState extends State<Scanner> {
                   padding: EdgeInsets.all(8.0),
                   child: Text("Enter your name before taking picture"),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(38.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: CameraPreview(
-                      cameraController,
-                      child: Material(
-                        color: Globals.primaryColor.withOpacity(.6),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Lottie.asset("assets/face4.json",
-                                reverse: true,
-                                options: LottieOptions(enableMergePaths: true)),
-                          ),
-                        ),
-                      ),
+                Card(
+                  margin:const EdgeInsets.symmetric(horizontal: 55, vertical: 55),
+                   elevation: 20.0,
+                  shadowColor: Colors.black.withOpacity(.4),
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: getFace,
+                    child: AnimatedPadding(
+                      duration:const Duration(milliseconds: 2400),
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      padding: EdgeInsets.all(readyToUpload? 70: 28.0),
+                      child: Lottie.asset(_image != null? "assets/image1.json" : "assets/face1.json",
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                      filterQuality: FilterQuality.high,),
                     ),
                   ),
                 ),
@@ -153,36 +168,11 @@ class _ScannerState extends State<Scanner> {
                           child: InkWell(
                             customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(19.0)),
-                            onTap: () {
-                              HapticFeedback.heavyImpact();
-                              capturing = false;
-                              cameraController
-                                  .startImageStream((CameraImage image) async {
-                                if (capturing) {
-                                  return;
-                                }
-                                capturing = true;
-                                final data = GoogleMlKit.vision.faceDetector().processImage(InputImage.fromBytes(bytes: image.planes[0].bytes, inputImageData: InputImageData(size: Size(image.width.toDouble(), image.height.toDouble(),),
-                                    imageRotation: rotationIntToImageRotation(cameraController.description.sensorOrientation),
-                                    inputImageFormat: InputImageFormat.bgra8888,
-                                    planeData: image.planes
-                                        .map((e) => InputImagePlaneMetadata(
-                                        bytesPerRow: e.bytesPerRow, height: e.height, width: e.width))
-                                        .toList())));
-
-                                debugPrint("${data}");
-
-                                // _predictFacesFromImage(image: image)
-                                //     .then((value) {
-                                //   capturing = false;
-                                // });
-                                return null;
-                              });
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
+                            onTap:widget.login? loginFace :registerFace,
+                            child: Padding(
+                              padding:const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 14.0),
-                              child: Text("Take Picture"),
+                              child: Text(widget.login? "Verify User" : "Register account"),
                             ),
                           ))
                     ],
@@ -195,40 +185,7 @@ class _ScannerState extends State<Scanner> {
     );
   }
 
-  List<Face> facesDetected = [];
-
-  _predictFacesFromImage({required CameraImage image}) async {
-    await detectFacesFromImage(image);
-
-    if (facesDetected.isNotEmpty) {
-
-      if (widget.login) {
-        debugPrint("Done signing in");
-      }
-    }
-  }
-
   Future<void> detectFacesFromImage(CameraImage image) async {
-    InputImageData _firebaseImageMetadata = InputImageData(
-        size: Size(image.width.toDouble(), image.height.toDouble()),
-        imageRotation: rotationIntToImageRotation(
-            cameraController.description.sensorOrientation),
-        inputImageFormat: InputImageFormat.bgra8888,
-        planeData: image.planes
-            .map((e) => InputImagePlaneMetadata(
-                bytesPerRow: e.bytesPerRow, height: e.height, width: e.width))
-            .toList());
-    InputImage _firebaseVisionImage = InputImage.fromBytes(
-        bytes: image.planes[0].bytes, inputImageData: _firebaseImageMetadata);
-    var result =
-        await _googleMlKit.faceDetector().processImage(_firebaseVisionImage);
-    if (result.isNotEmpty) {
-      debugPrint("Face Detected");
-      facesDetected = result;
-    }
-  }
 
-  rotationIntToImageRotation(int sensorOrientation) {
-    return InputImageRotationValue.fromRawValue(sensorOrientation);
   }
 }

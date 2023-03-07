@@ -55,6 +55,10 @@ dependencies:
   firebase_core: ^2.6.1
   hive_flutter: ^1.1.0
   aws_rekognition_api: ^2.0.0
+  image_picker: ^0.8.6+2
+  dio: ^5.0.1
+  amplify_storage_s3: ^0.5.1
+  amplify_auth_cognito: ^0.5.1
 
 dev_dependencies:
   flutter_launcher_icons:

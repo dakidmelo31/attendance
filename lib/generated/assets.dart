@@ -2,6 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String assetsFace1 = 'assets/face1.json';
+  static const String assetsFace2 = 'assets/face2.json';
+  static const String assetsFace3 = 'assets/face3.json';
+  static const String assetsFace4 = 'assets/face4.json';
+  static const String assetsFace5 = 'assets/face5.json';
+  static const String assetsFaceid1 = 'assets/faceid1.json';
+  static const String assetsImage1 = 'assets/image1.json';
+  static const String assetsImage2 = 'assets/image2.json';
+  static const String assetsLogo = 'assets/logo.png';
+  static const String assetsProcessing1 = 'assets/processing1.json';
   static const String assetsScan1 = 'assets/scan1.json';
   static const String assetsScan2 = 'assets/scan2.json';
   static const String facesFace1 = 'assets/faces/face1.webp';

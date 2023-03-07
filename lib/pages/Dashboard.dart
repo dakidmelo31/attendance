@@ -102,9 +102,15 @@ class _DashboardState extends State<Dashboard> {
                           HapticFeedback.heavyImpact();
                           Navigator.push(context, SizeTransition2(const Scanner()));
                         }, child: ClipOval(child: Lottie.asset("assets/face5.json", fit: BoxFit.contain, alignment: Alignment.center)),),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text("Register", style: TextStyle(color: Globals.primaryColor, fontWeight: FontWeight.w600),),
+                        InkWell(
+                          onTap: (){
+                            HapticFeedback.heavyImpact();
+                            Navigator.push(context, SizeTransition2(const Scanner()));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text("Register", style: TextStyle(color: Globals.primaryColor, fontWeight: FontWeight.w600),),
+                          ),
                         )
                       ],
                     ),
@@ -122,9 +128,15 @@ class _DashboardState extends State<Dashboard> {
                           HapticFeedback.heavyImpact();
                           Navigator.push(context, SizeTransition2(const Scanner()));
                         }, child: ClipOval(child: Lottie.asset("assets/face2.json", fit: BoxFit.contain, alignment: Alignment.center)),),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text("Login", style: TextStyle(color: Globals.primaryColor, fontWeight: FontWeight.w600),),
+                        InkWell(
+                          onTap:(){
+                            HapticFeedback.heavyImpact();
+                            Navigator.push(context, SizeTransition2(const Scanner()));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text("Login", style: TextStyle(color: Globals.primaryColor, fontWeight: FontWeight.w600),),
+                          ),
                         )
                       ],
                     ),
